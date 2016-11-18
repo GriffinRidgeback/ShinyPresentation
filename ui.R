@@ -2,7 +2,7 @@ library(shiny)
 
 shinyUI(fluidPage(
   
-  titlePanel("Predict Fertility Rates from 2 different models"),
+  titlePanel("Predict Fertility Rates using two different models"),
   
   sidebarLayout(
     
@@ -28,11 +28,11 @@ shinyUI(fluidPage(
       plotOutput("plot1"),
       
       h3("Predicted Fertility from Model 1:"),
-      
+      textOutput("formula1"),
       textOutput("pred1"),
       
       h3("Predicted Fertility from Model 2:"),
-      
+      textOutput("formula2"),
       textOutput("pred2")
     )
   )

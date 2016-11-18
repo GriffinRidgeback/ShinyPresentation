@@ -6,7 +6,7 @@ shinyServer(function(input, output) {
   
   model1pred <- reactive({
     agricultureInput <- input$sliderAgriculture
-    predict(model.1, newdata = data.frame(Agriculture = agricultureInput))
+    round(predict(model.1, newdata = data.frame(Agriculture = agricultureInput)), 2)
   })
   
   model2pred <- reactive({
@@ -15,13 +15,13 @@ shinyServer(function(input, output) {
     educationInput <- input$sliderEducation
     catholicInput <- input$sliderCatholic
     infantMortalityInput <- input$sliderInfantMortality
-    predict(model.2, newdata = data.frame(
-      Agriculture = agricultureInput,
-      Examination = examinationInput,
-      Education = educationInput,
-      Catholic = catholicInput,
-      Infant.Mortality = infantMortalityInput
-      ))
+    round(predict(model.2, newdata = data.frame(
+          Agriculture = agricultureInput,
+          Examination = examinationInput,
+          Education = educationInput,
+          Catholic = catholicInput,
+          Infant.Mortality = infantMortalityInput
+      )), 2)
   })
   
   output$plot1 <- renderPlot({
@@ -49,13 +49,6 @@ shinyServer(function(input, output) {
       abline(model.2$coefficients[1:2], col = "blue", lwd = 2)
     }
     
-    # if(input$showModel2){
-    #   model2lines <- predict(model2, newdata = data.frame(carat = mpgInput,
-    #                meanCarat = ifelse(mpgInput > mean(diamonds$carat),
-    #                                   mpgInput, mean(diamonds$carat))))
-    #   lines(1:length(diamonds$carat), model2lines, col = "blue", lwd = 2)
-    # }
-    
     legend(25, 250, c("Model 1 Prediction", "Model 2 Prediction"), pch = 16, 
            col = c("red", "blue"), bty = "n", cex = 1.2)
     
@@ -64,10 +57,16 @@ shinyServer(function(input, output) {
     points(examinationInput, model2pred(), col = "blue", pch = 16, cex = 2)
   })
   
+  output$formula1 <- renderText({
+    deparse(model.1$call)
+  })
   output$pred1 <- renderText({
     model1pred()
   })
   
+  output$formula2 <- renderText({
+    deparse(model.2$call)
+  })
   output$pred2 <- renderText({
     model2pred()
   })
