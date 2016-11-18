@@ -1,0 +1,71 @@
+---
+title: "Multivariate Linear Regression to predict Fertility"
+author: "Kevin E. D'Elia"
+date: "November 18, 2016"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project Overview
+The Swiss dataset, one of the base R datasets, contains standardized fertility measure and socio-economic indicators for each of 47 French-speaking provinces of Switzerland at about 1888.  This project required the development of a [Shiny](http://shiny.rstudio.com/) application that includes the use of _reactive programming_.  Reactive programming is the concept of performing server calculations based on user inputs.  In this application, two different linear models are executed.  The predictions made from those models can be dynamically changed using input sliders to adjust the values of various exploratory variables.  Finally, the results of those calculations are displayed graphically and textually to the user.  The subsequent slides explore the application in greater detail.
+
+## Tour of the Shiny App
+
+The Shiny application has three major components:
+
+- **Side panel with sliders:**  Here the user can adjust the values of the various exploratory values available in the dataset.  Also, the display of A-B lines can be suppressed using checkboxes.
+- **Plot area:** Here the raw Fertility rates are plotted.  Trend lines showing the direction of the two models are displayed and can be suppressed as described above.  The changing values of the Fertility prediction, based on the values selected on the slider, are show relative to the raw Fertility data.
+- **Results of Linear Model calculations:**  Here the predictions, made based on the Linear Models, are displayed, and they adjust dynamically when values selected from the input sliders are altered.
+
+## Linear Models used
+
+### Predict Fertility using Agriculture Exploratory Variable
+```{r runModel1, echo=FALSE}
+model.1 <- lm(Fertility ~ Agriculture, data = swiss)
+```
+
+```{r showModel1}
+model.1$call
+```
+
+### Predict Fertility excluding Agriculture Exploratory Variable
+```{r model2, echo=FALSE}
+model.2 <- lm(Fertility ~ . -Agriculture, data = swiss)
+```
+
+```{r showModel2}
+model.2$call
+```
+Full code available at [github](https://github.com/GriffinRidgeback/ShinyPresentation)
+
+## Sample Plot
+
+```{r swissPlot, echo=FALSE}
+faiths <- as.factor(ifelse(swiss$Catholic > 50.0, "Catholic", "Protestant"))
+
+plot(1:nrow(swiss), 
+     swiss$Fertility, 
+     xlab = "Protestants vs. Catholics", 
+     ylab = "Fertility Rates", 
+     bty = "n", 
+     pch = 16, 
+     col = faiths,
+     xlim = c(0, 50),
+     ylim = c(0, 100))
+
+legend(5, 
+       30, 
+       c("Protestant", "Catholic"), 
+       pch = 16, 
+       col = faiths, 
+       bty = "n", 
+       cex = 1.2)
+
+abline(model.1, col = "green", lwd = 2)
+
+abline(model.2$coefficients[1:2], col = "orange", lwd = 2)
+```
+Running application available at [github](https://github.com/GriffinRidgeback/ShinyPresentation)
