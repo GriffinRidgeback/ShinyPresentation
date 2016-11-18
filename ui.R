@@ -28,12 +28,12 @@ shinyUI(fluidPage(
       plotOutput("plot1"),
       
       h3("Predicted Fertility from Model 1:"),
-      textOutput("formula1"),
-      textOutput("pred1"),
+      h4(textOutput("formula1")),
+      h5(textOutput("pred1")),
       
       h3("Predicted Fertility from Model 2:"),
-      textOutput("formula2"),
-      textOutput("pred2")
+      h4(textOutput("formula2")),
+      h5(textOutput("pred2"))
     )
   )
 ))
