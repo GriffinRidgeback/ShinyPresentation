@@ -10,13 +10,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Project Overview
-The Swiss dataset, one of the base R datasets, contains standardized fertility measure and socio-economic indicators for each of 47 French-speaking provinces of Switzerland at about 1888.  This project required the development of a [Shiny](http://shiny.rstudio.com/) application that includes the use of _reactive programming_.  Reactive programming is the concept of performing server calculations based on user inputs.  In this application, two different linear models are executed.  The predictions made from those models can be dynamically changed using input sliders to adjust the values of various exploratory variables.  Finally, the results of those calculations are displayed graphically and textually to the user.  The subsequent slides explore the application in greater detail.
+The Swiss dataset, one of the base R datasets, contains standardized fertility measure and socio-economic indicators for each of 47 French-speaking provinces of Switzerland at about 1888.  This project required the development of a [Shiny](http://shiny.rstudio.com/) application that includes the use of _reactive programming_.  Reactive programming is the concept of performing server calculations based on user inputs.  In this application, two different linear models are executed.  The predictions made from those models can be dynamically changed using input sliders to adjust the values of various exploratory variables.  Regression lines overlaid on the plot show the data trends. Finally, the results of those calculations are displayed graphically and textually to the user.  The subsequent slides explore the application in greater detail.
 
 ## Tour of the Shiny App
 
 The Shiny application has three major components:
 
-- **Side panel with sliders:**  Here the user can adjust the values of the various exploratory values available in the dataset.  Also, the display of A-B lines can be suppressed using checkboxes.
+- **Side panel with sliders:**  Here the user can adjust the values of the various exploratory values available in the dataset.  Also, the display of the regression lines can be suppressed using checkboxes.  Clicking the **Generate Models** button produces predicted values from the models.
 - **Plot area:** Here the raw Fertility rates are plotted.  Trend lines showing the direction of the two models are displayed and can be suppressed as described above.  The changing values of the Fertility prediction, based on the values selected on the slider, are show relative to the raw Fertility data.
 - **Results of Linear Model calculations:**  Here the predictions, made based on the Linear Models, are displayed, and they adjust dynamically when values selected from the input sliders are altered.
 
@@ -39,7 +39,7 @@ model.2 <- lm(Fertility ~ . -Agriculture, data = swiss)
 ```{r showModel2}
 model.2$call
 ```
-Full code available at [github](https://github.com/GriffinRidgeback/ShinyPresentation)
+Full code available at [github](https://github.com/GriffinRidgeback/ShinyPresentation).
 
 ## Sample Plot
 
@@ -64,8 +64,16 @@ legend(5,
        bty = "n", 
        cex = 1.2)
 
-abline(model.1, col = "green", lwd = 2)
+abline(model.1, col = "blue", lwd = 2)
 
 abline(model.2$coefficients[1:2], col = "orange", lwd = 2)
+
+legend(25, 
+       30, 
+       c("Model 1 Prediction", "Model 2 Prediction"), 
+       pch = 16, 
+       col = c("blue", "orange"), 
+       bty = "n", 
+       cex = 1.2)
 ```
-Running application available at [github](https://github.com/GriffinRidgeback/ShinyPresentation)
+Running application available at [shinyapps.io](http://thedatascientist.shinyapps.io/ShinyPresentation).
